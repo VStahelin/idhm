@@ -1,0 +1,24 @@
+json layouts
+
+------ultimo-dado---------------------
+{
+  "city": {
+    "name": "sao pedro de alcantara",
+    "state": "sc",
+    "city_stats": {
+      "population": "5000",
+      "idhm": "1",
+      "idhm_educational": "1",
+      "idhm_income": "1"
+    },
+    "covid_status": {
+      "last_update": "10/10/1010",
+      "last_confirmeds": "10",
+      "total_confirmeds": "100",
+      "last_deaths": "0",
+      "total_death": "0",
+      "death_rate": "0"
+    }
+  }
+}
+--------------------------------------
