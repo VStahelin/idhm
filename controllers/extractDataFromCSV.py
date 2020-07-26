@@ -15,7 +15,6 @@ def extaiCidades():
             nome = valores[1][0:len(valores[1]) - 4]
             uf = valores[1][len(valores[1]) - 3:len(valores[1]) - 1]
             idEstado = getIdEstadoFromUf(uf)
-
             instCidade(str(idEstado), nome, valores[2], valores[3], valores[4], valores[5])
 
 

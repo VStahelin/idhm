@@ -32,15 +32,15 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `idhms`.`casoFullCovid` (
   `date` DATE NULL,
-  `state` VARCHAR(45) NULL,
-  `city` VARCHAR(45) NULL,
-  `confirmed` VARCHAR(45) NULL,
-  `order_for_place` VARCHAR(45) NULL,
-  `is_last` VARCHAR(45) NULL,
-  `estimated_population_2019` VARCHAR(45) NULL,
-  `city_ibge_code` VARCHAR(45) NULL,
-  `confirmed_per_100k_inhabitants` VARCHAR(45) NULL,
-  `death_rate` VARCHAR(45) NULL,
-  `place_type` VARCHAR(45) NULL,
-  `deaths` VARCHAR(45) NULL)
+  `state` VARCHAR(3) NULL,
+  `city` VARCHAR(60) NULL,
+  `place_type` VARCHAR(10) NULL,
+  `confirmed` VARCHAR(15) NULL,
+  `deaths` VARCHAR(15) NULL,
+  `order_for_place` VARCHAR(7) NULL,
+  `is_last` VARCHAR(5) NULL,
+  `estimated_population_2019` VARCHAR(15) NULL,
+  `city_ibge_code` VARCHAR(10) NULL,
+  `confirmed_per_100k_inhabitants` VARCHAR(15) NULL,
+  `death_rate` VARCHAR(7) NULL)
 ENGINE = InnoDB;

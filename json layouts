@@ -22,3 +22,6 @@ json layouts
   }
 }
 --------------------------------------
+
+[(datetime.date(2020, 7, 24), 'SC', 'São Pedro de Alcântara', 'city', '27', '0', '122', 'True', '5823', '4217253', '463.67852', '0.0000')]
+[('São Pedro de Alcântara ', 0.734, 0.757, 0.846, 0.618, 'Santa Catarina', 'SC', 'Região Sul')]
