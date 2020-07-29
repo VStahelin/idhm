@@ -55,4 +55,4 @@ docs/_build/
 target/
 .idea/dictionaries/Vitor.xml
 
-.idea/vcs.xml
+.idea/*
