@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>
+        Single status city
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+          name='viewport'/>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet"/>
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../assets/demo/demo.css" rel="stylesheet"/>
+</head>
+
+<body class="">
+<div class="wrapper ">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <div class="logo">
+            <a class="simple-text logo-mini">
+                <div class="logo-image-small">
+                    <img src="../assets/img/coroninha.png"/>
+                </div>
+            </a>
+            <a href="https://conteudo.imguol.com.br/c/noticias/a2/2020/03/18/18mar2020---o-presidente-jair-bolsonaro-ao-lado-de-varios-ministros-durante-coletiva-de-imprensa-para-falar-sobre-medidas-do-governo-pra-contar-a-epidemia-de-coronavirus-no-palacio-do-planalto-ao-1584568575929_v2_900x506.jpg"
+               class="simple-text logo-normal">
+                Lil'Gripe
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li class="active ">
+                    <a href="./dashboard.html">
+                        <i class="nc-icon nc-bank"></i>
+                        <p>Estatus unitario</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <a id="texto_titulo" class="navbar-brand" href="javascript:;">CIDADE - ESTADO </a> Ultima
+                    atualizacao: &nbsp<b id="ultima_att"></b>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                        aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <form>
+                        <div class="input-group no-border">
+                            <input type="text" value="" class="form-control" placeholder="Search...">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <i class="nc-icon nc-zoom-split"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <!--      COVID STATUS-->
+        <div class="content">
+            <!--        IDHM-->
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-single-02 text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category">Populacao</p>
+                                        <p class="card-title">
+                                        <p id="populacao_n">0</p>
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="nc-icon nc-alert-circle-i"></i>
+                                Censo: <b>2014</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-hat-3 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category">IDHM</p>
+                                        <p class="card-title">
+                                        <p id="idhm">0</p>
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="nc-icon nc-alert-circle-i"></i>
+                                Censo: <b>2014</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-glasses-2 text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category">IDHM Educacional</p>
+                                        <p class="card-title">
+                                        <p id="idhm_educacional">0
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="nc-icon nc-alert-circle-i"></i>
+                                Censo: <b>2014</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-money-coins text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category">IDHM por renda</p>
+                                        <p class="card-title" id="idhm_renda">0
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="nc-icon nc-alert-circle-i"></i>
+                                Censo: <b>2014</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-scissors text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category">Mortos por covid</p>
+                                        <p class="card-title">
+                                        <p id="covid_death">0
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="fa fa-refresh"></i>
+                                Novas mortes: <b id="novas_mortes">0</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-check-2 text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category">Confirmados</p>
+                                        <p class="card-title" id="total_confirmados">0
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="fa fa-refresh"></i>
+                                Novos confirmados: <b id="novos_confirmados">0</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-sound-wave text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category">Indice de morte</p>
+                                        <p class="card-title">
+                                        <p id="morte_rate">0</p>
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="nc-icon nc-alert-circle-i"></i>
+                                Óbitos/confirmados
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-favourite-28 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-category" id="total_recuperados">Recuperados</p>
+                                        <p class="card-title">+45K
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats">
+                                <i class="fa fa-refresh"></i>
+                                Novos recuperados: <b id="novos_recuperados">0</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        var URL = encodeURI("http://127.0.0.1:5000/cidades/sc/sao jose");
+        var json = JSON.parse(callApi(URL));
+        console.log(json.values.city_stats.population);
+        document.getElementById("populacao_n").innerHTML = json.values.city_stats.population;
+        document.getElementById("covid_death").innerHTML = json.values.covid_status.total_death;
+        document.getElementById("texto_titulo").innerHTML = json.values.name + " - " + json.values.uf
+        document.getElementById("ultima_att").innerHTML = json.values.covid_status.last_update;
+        document.getElementById("total_confirmados").innerHTML = json.values.covid_status.total_confirmeds;
+        document.getElementById("novas_mortes").innerHTML = 0; //json.values.covid_status.last_deaths; TODO
+        document.getElementById("novos_confirmados").innerHTML = 0;//json.values.covid_status.last_confirmeds; TODO
+        document.getElementById("novos_recuperados").innerHTML = 0; // TODO
+        document.getElementById("idhm").innerHTML = json.values.city_stats.idhm;
+        document.getElementById("idhm_renda").innerHTML = json.values.city_stats.idhm_income;
+        document.getElementById("idhm_educacional").innerHTML = json.values.city_stats.idhm_educational;
+        document.getElementById("morte_rate").innerHTML = json.values.covid_status.death_rate;
+
+
+    }
+
+    function callApi(url) {
+        var request = new XMLHttpRequest();
+        request.open("GET", url, false);
+        request.send();
+        return request.responseText;
+    }
+
+
+</script>
+
+<!--   Core JS Files   -->
+<script src="../assets/js/core/jquery.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<!--  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>-->
+
+<!-- Chart JS -->
+<script src="../assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="../assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
+<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+<script src="../assets/demo/demo.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>
