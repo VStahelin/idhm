@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 from flask_cors import CORS, cross_origin
 
-from idhm_api.controllers.apiCidadeController import getUltimoStatusCidade
+from idhm_api.controllers.apiCidadeController import getUltimoStatusCidade, getGraficoStatusCidade
 
 app = Flask(__name__, template_folder='../WEB-INF/templates')
 cors = CORS(app)
@@ -29,6 +29,18 @@ def aa(uf, cidade):
     try:
         json = {'encode': "utf-8", 'values': getUltimoStatusCidade(cidade, uf)}
         if len(json['values']) == 0:
+            return 'bad request', 400
+        return json, 200
+    except:
+        return 'bad request', 400
+
+# http://127.0.0.1:5000/cidades/historico/sc/florianopolis
+@app.route('/cidades/historico/<string:uf>/<string:cidade>', methods=['GET'])
+@cross_origin()
+def historico(uf, cidade):
+    try:
+        json = {'encode': "utf-8", 'status': getGraficoStatusCidade(cidade, uf)}
+        if len(json['status']) == 0:
             return 'bad request', 400
         return json, 200
     except:

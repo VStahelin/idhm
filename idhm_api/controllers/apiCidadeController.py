@@ -1,4 +1,5 @@
-from idhm_api.dao.OpracoesSQL import getUltimoDadoCovidDaCidade, getIdhmCidade, validCidade
+from idhm_api.dao.OpracoesSQL import getUltimoDadoCovidDaCidade, getIdhmCidade, validCidade, \
+    getGraficoCovidPorCidadeTodoTempo
 
 
 def getUltimoStatusCidade(cidade, uf):
@@ -34,5 +35,32 @@ def getUltimoStatusCidade(cidade, uf):
     return city
 
 
+def getGraficoStatusCidade(cidade, uf):
+    if not validCidade(cidade, uf):
+        return {}
+
+    idhm = getIdhmCidade(cidade, uf)
+    city = {}
+    city['name'] = idhm[0]
+    city['state'] = idhm[5]
+    city['federal_region'] = idhm[7]
+    city['uf'] = idhm[6]
+
+    values = []
+    for row in getGraficoCovidPorCidadeTodoTempo(cidade, uf):
+        covid_status = {}
+        covid_status['date'] = row[0].strftime("%d/%m/%Y")
+        covid_status['last_confirmeds'] = ''  # TODO
+        covid_status['total_confirmeds'] = int(row[4])
+        covid_status['last_deaths'] = ''  # TODO
+        covid_status['total_death'] = int(row[5])
+        covid_status['death_rate'] = float(row[11])
+        values.append(covid_status)
+
+    city['values'] = values
+
+    return city
+
+
 if __name__ == "__main__":
-    getUltimoStatusCidade("sao pedro de alcantara", "sc")
+    print(getGraficoStatusCidade("sao pedro de alcantara", "sc"))

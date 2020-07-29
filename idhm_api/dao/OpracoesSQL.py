@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import datetime
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -39,6 +40,28 @@ def getUltimoDadoCovidDaCidade(cidade, uf):
     return mycursor.fetchall()[0]
 
 
+def getGraficoCovidPorCidadePorData(cidade, uf, data_inicial, data_final):
+    sql = 'SELECT * FROM casofullcovid where place_type = "city" and city="{}" and state="{}" and date BETWEEN "{}" ' \
+          'AND "{}";'.format(cidade, uf, data_inicial, data_final)
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    return mycursor.fetchall()[0]
+
+
+def getGraficoCovidPorCidadePorTimestamp(cidade, uf, ts_inicial, ts_final):
+    data_inicial = datetime.fromtimestamp(ts_inicial)
+    data_final = datetime.fromtimestamp(ts_final)
+    return getGraficoCovidPorCidadePorData(cidade, uf, data_inicial, data_final)
+
+
+def getGraficoCovidPorCidadeTodoTempo(cidade, uf):
+    sql = 'SELECT * FROM casofullcovid where place_type = "city" and city="{}" and ' \
+          'state="{}" order by date asc;'.format(cidade, uf)
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    return mycursor.fetchall()
+
+
 def getIdhmCidade(cidade, uf):
     sql = 'Select cidades.nome, cidades.idhm, cidades.idhmRenda, cidades.idhmLongv, cidades.idhmEdu, estados.nome, ' \
           'estados.uf, estados.regiao FROM cidades join estados on cidades.idEstado = estados.idEstado where ' \
@@ -59,7 +82,8 @@ def validUf(uf):
 
 def validCidade(cidade, uf):
     if validUf(uf):
-        sql = 'SELECT cidades.nome FROM cidades join estados on cidades.idEstado = estados.idEstado where cidades.nome = "{}";'.format(cidade)
+        sql = 'SELECT cidades.nome FROM cidades join estados on cidades.idEstado = estados.idEstado where cidades.nome = "{}";'.format(
+            cidade)
         mycursor = mydb.cursor()
         mycursor.execute(sql)
         for i in mycursor:
@@ -68,5 +92,7 @@ def validCidade(cidade, uf):
     else:
         return False
 
-if __name__=="__main__":
-    print(getIdhmCidade("sao pedro de alcantara", "sc"))
+
+if __name__ == "__main__":
+    for row in getGraficoCovidPorCidadeTodoTempo("sao pedro de alcantara", "sc"):
+        print(row)
