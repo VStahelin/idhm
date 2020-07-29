@@ -56,3 +56,4 @@ target/
 .idea/dictionaries/Vitor.xml
 
 .idea/*
+venv/*
