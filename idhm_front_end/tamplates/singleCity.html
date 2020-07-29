@@ -20,7 +20,23 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet"/>
 </head>
+<!--   Core JS Files   -->
+<script src="../assets/js/core/jquery.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<!--  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>-->
 
+<!-- Chart JS -->
+<script src="../assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="../assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
+<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+<script src="../assets/demo/demo.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>
 <body class="">
 <div class="wrapper ">
     <div class="sidebar" data-color="white" data-active-color="danger">
@@ -38,7 +54,7 @@
         <div class="sidebar-wrapper">
             <ul class="nav">
                 <li class="active ">
-                    <a href="./dashboard.html">
+                    <a href="#">
                         <i class="nc-icon nc-bank"></i>
                         <p>Estatus unitario</p>
                     </a>
@@ -311,15 +327,41 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <h5 class="card-title">Historico</h5>
+                            <p class="card-category">Grafico de mortos/infectados por covid-19</p>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="historico_covid" width="400" height="100"></canvas>
+                        </div>
+                        <div class="card-footer">
+                            <div class="chart-legend">
+                                <i class="fa fa-circle text-danger"></i> Mortos
+                                <i class="fa fa-circle text-warning"></i> infectados
+                            </div>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
     window.onload = function () {
-        var URL = encodeURI("http://127.0.0.1:5000/cidades/sc/sao jose");
+        var cidade = "sao paulo";
+        var uf = "sp";
+        initCharts(cidade, uf)
+        populateCards(cidade, uf)
+    }
+
+    function populateCards(cidade, uf) {
+        var URL = encodeURI("http://127.0.0.1:5000/cidades/" + uf + "/" + cidade);
         var json = JSON.parse(callApi(URL));
-        console.log(json.values.city_stats.population);
         document.getElementById("populacao_n").innerHTML = json.values.city_stats.population;
         document.getElementById("covid_death").innerHTML = json.values.covid_status.total_death;
         document.getElementById("texto_titulo").innerHTML = json.values.name + " - " + json.values.uf
@@ -332,8 +374,72 @@
         document.getElementById("idhm_renda").innerHTML = json.values.city_stats.idhm_income;
         document.getElementById("idhm_educacional").innerHTML = json.values.city_stats.idhm_educational;
         document.getElementById("morte_rate").innerHTML = json.values.covid_status.death_rate;
+    }
 
+    function initCharts(cidade, uf) {
+        var URL = encodeURI("http://127.0.0.1:5000/cidades/historico/" + uf + "/" + cidade);
+        var historico_json = JSON.parse(callApi(URL));
 
+        var confirmados = [];
+        var mortos = [];
+        var datas = [];
+
+        getValues();
+        console.log(confirmados);
+        console.log(mortos);
+        console.log(datas);
+
+        function getValues() {
+            var values = historico_json.status.values;
+            for (let i = 0; i < values.length; i++) {
+                confirmados.push(values[i].total_confirmeds);
+                datas.push(values[i].date);
+                mortos.push(values[i].total_death)
+            }
+        }
+
+        var grafico_cidade_covid_status = document.getElementById("historico_covid");
+
+        var linha_confirmados = {
+            data: confirmados,
+            fill: false,
+            borderColor: '#fbc658',
+            backgroundColor: 'transparent',
+            pointBorderColor: '#fbc658',
+            pointRadius: 1,
+            pointHoverRadius: 4,
+            pointBorderWidth: 5,
+        };
+
+        var linha_mortos = {
+            data: mortos,
+            fill: false,
+            borderColor: '#dc3545',
+            backgroundColor: 'transparent',
+            pointBorderColor: '#dc3545',
+            pointRadius: 1,
+            pointHoverRadius: 4,
+            pointBorderWidth: 5,
+        };
+
+        var covid_status = {
+            labels: datas,
+            datasets: [linha_confirmados, linha_mortos]
+        };
+
+        var chartOptions = {
+            legend: {
+                display: false,
+                position: 'top'
+            }
+        };
+
+        var lineChart = new Chart(grafico_cidade_covid_status, {
+            type: 'line',
+            hover: false,
+            data: covid_status,
+            options: chartOptions
+        });
     }
 
     function callApi(url) {
@@ -342,24 +448,4 @@
         request.send();
         return request.responseText;
     }
-
-
 </script>
-
-<!--   Core JS Files   -->
-<script src="../assets/js/core/jquery.min.js"></script>
-<script src="../assets/js/core/popper.min.js"></script>
-<script src="../assets/js/core/bootstrap.min.js"></script>
-<!--  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>-->
-
-<!-- Chart JS -->
-<script src="../assets/js/plugins/chartjs.min.js"></script>
-<!--  Notifications Plugin    -->
-<script src="../assets/js/plugins/bootstrap-notify.js"></script>
-<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-<script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
-<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-<script src="../assets/demo/demo.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</body>
-</html>
