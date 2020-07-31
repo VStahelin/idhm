@@ -35,6 +35,7 @@
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/demo/demo.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </body>
 </html>
 <body class="">
@@ -64,7 +65,7 @@
     </div>
     <div class="main-panel">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent ">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
                     <div class="navbar-toggle">
@@ -77,31 +78,21 @@
                     <a id="texto_titulo" class="navbar-brand" href="javascript:;">CIDADE - ESTADO </a> Ultima
                     atualizacao: &nbsp<b id="ultima_att"></b>
                 </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-                        aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-bar navbar-kebab"></span>
-                    <span class="navbar-toggler-bar navbar-kebab"></span>
-                    <span class="navbar-toggler-bar navbar-kebab"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                    <form>
-                        <div class="input-group no-border">
-                            <input type="text" value="" class="form-control" placeholder="Search...">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <i class="nc-icon nc-zoom-split"></i>
-                                </div>
-                            </div>
+                <form>
+                    <div class="form-group">
+                        <div align="center">
+                            <input type="text" name="search" id="search" placeholder="Cidade"
+                                   class="form-control mr-sm-2"/>
                         </div>
-                    </form>
-                    </ul>
-                </div>
+                        <ul class="list-group" id="result"></ul>
+                        <br/>
+                    </div>
+                </form>
+                </ul>
             </div>
         </nav>
         <!-- End Navbar -->
-        <!--      COVID STATUS-->
         <div class="content">
-            <!--        IDHM-->
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card card-stats">
@@ -311,7 +302,7 @@
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
                                         <p class="card-category" id="total_recuperados">Recuperados</p>
-                                        <p class="card-title">+45K
+                                        <p class="card-title">--
                                         <p>
                                     </div>
                                 </div>
@@ -353,10 +344,52 @@
 
 <script>
     window.onload = function () {
-        var cidade = "sao paulo";
-        var uf = "sp";
+        var cidade = sessionStorage.getItem('cidade');
+        var uf = sessionStorage.getItem('uf');
+
+        if (cidade == undefined || uf == undefined) {
+            cidade = "florianopolis";
+            uf = "sc";
+        }
+
         initCharts(cidade, uf)
         populateCards(cidade, uf)
+
+    }
+    $(document).ready(function () {
+        $.ajaxSetup({cache: false});
+        $('#search').keyup(function () {
+            if ($('#search').val() == "") {
+                $('#result').html('');
+                return
+            }
+            $('#result').html('');
+            $('#state').val('');
+            var searchField = normalize($('#search').val());
+            var expression = new RegExp(searchField, "i");
+            $.getJSON('cidades.json', function (data) {
+                $.each(data, function (key, value) {
+                    if (value.city_normal.search(expression) != -1 || value.state.search(expression) != -1) {
+                        $('#result').append('<li class="list-group-item link-class">' + value.city + '-' + value.state + '</li>');
+                    }
+                });
+            });
+        });
+
+        $('#result').on('click', 'li', function () {
+            var click_text = $(this).text().split('-');
+            updateCharts(click_text[0], click_text[1]);
+        });
+    });
+
+    function normalize(string) {
+        return string.toString().normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, ' ');
+    }
+
+    function updateCharts(cidade, uf) {
+        sessionStorage.setItem('cidade', cidade);
+        sessionStorage.setItem('uf', uf);
+        location.reload();
     }
 
     function populateCards(cidade, uf) {
@@ -376,18 +409,15 @@
         document.getElementById("morte_rate").innerHTML = json.values.covid_status.death_rate;
     }
 
-    function initCharts(cidade, uf) {
+    function initCharts(cidade, uf, isFrist) {
+        // removeData();
         var URL = encodeURI("http://127.0.0.1:5000/cidades/historico/" + uf + "/" + cidade);
         var historico_json = JSON.parse(callApi(URL));
 
         var confirmados = [];
         var mortos = [];
         var datas = [];
-
         getValues();
-        console.log(confirmados);
-        console.log(mortos);
-        console.log(datas);
 
         function getValues() {
             var values = historico_json.status.values;
@@ -397,8 +427,6 @@
                 mortos.push(values[i].total_death)
             }
         }
-
-        var grafico_cidade_covid_status = document.getElementById("historico_covid");
 
         var linha_confirmados = {
             data: confirmados,
@@ -434,12 +462,13 @@
             }
         };
 
-        var lineChart = new Chart(grafico_cidade_covid_status, {
+        var lineChart = new Chart(document.getElementById("historico_covid"), {
             type: 'line',
             hover: false,
             data: covid_status,
             options: chartOptions
         });
+
     }
 
     function callApi(url) {

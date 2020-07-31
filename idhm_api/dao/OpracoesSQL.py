@@ -93,6 +93,20 @@ def validCidade(cidade, uf):
         return False
 
 
+def getCitysAndUf():
+    sql = 'SELECT city, state FROM casofullcovid where place_type = "city" and is_last = "true" order by city asc;'
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    return mycursor.fetchall()
+
+
+def insertCityInCidades2(lista):
+    sql = 'INSERT INTO cidades2 (city, state, city_normal) VALUES ("{}", "{}", "{}")'.format(lista[0],lista[1],lista[2])
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    mydb.commit()
+
+
 if __name__ == "__main__":
     for row in getGraficoCovidPorCidadeTodoTempo("sao pedro de alcantara", "sc"):
         print(row)
