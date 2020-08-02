@@ -82,7 +82,8 @@ def validUf(uf):
 
 def validCidade(cidade, uf):
     if validUf(uf):
-        sql = 'SELECT cidades.nome FROM cidades join estados on cidades.idEstado = estados.idEstado where cidades.nome = "{}";'.format(
+        sql = 'SELECT cidades.nome FROM cidades join estados on cidades.idEstado = estados.idEstado where ' \
+              'cidades.nome = "{}";'.format(
             cidade)
         mycursor = mydb.cursor()
         mycursor.execute(sql)
@@ -101,12 +102,21 @@ def getCitysAndUf():
 
 
 def insertCityInCidades2(lista):
-    sql = 'INSERT INTO cidades2 (city, state, city_normal) VALUES ("{}", "{}", "{}")'.format(lista[0],lista[1],lista[2])
+    sql = 'INSERT INTO cidades2 (city, state, city_normal) VALUES ("{}", "{}", "{}")'.format(lista[0], lista[1],
+                                                                                             lista[2])
     mycursor = mydb.cursor()
     mycursor.execute(sql)
     mydb.commit()
 
 
+def getStatusGeralBrasilDB():
+    sql = 'SELECT casofullcovid.date, casofullcovid.state, estados.nome ,casofullcovid.confirmed, casofullcovid.deaths, casofullcovid.estimated_population_2019, casofullcovid.death_rate  FROM casofullcovid join estados on casofullcovid.state = estados.uf where is_last = "true" and place_type = "state";'
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    return mycursor.fetchall()
+
+
 if __name__ == "__main__":
-    for row in getGraficoCovidPorCidadeTodoTempo("sao pedro de alcantara", "sc"):
-        print(row)
+    # for row in getGraficoCovidPorCidadeTodoTempo("sao pedro de alcantara", "sc"):
+    #     print(row)
+    print(getStatusGeralBrasilDB())

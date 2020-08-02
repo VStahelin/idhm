@@ -1,5 +1,5 @@
 from idhm_api.dao.OpracoesSQL import getUltimoDadoCovidDaCidade, getIdhmCidade, validCidade, \
-    getGraficoCovidPorCidadeTodoTempo
+    getGraficoCovidPorCidadeTodoTempo, getStatusGeralBrasilDB
 
 
 def getUltimoStatusCidade(cidade, uf):
@@ -62,5 +62,67 @@ def getGraficoStatusCidade(cidade, uf):
     return city
 
 
+def getStatusGeralEstados():
+    dados = getStatusGeralBrasilDB()
+
+    estados = []
+    for row in dados:
+        estado = {}
+        estado['date'] = row[0].strftime("%d/%m/%Y")
+        estado['name'] = row[2]
+        estado['uf'] = row[1]
+        estado['population'] = row[5]
+        estado['total_confirmeds'] = int(row[3])
+        estado['last_confirmeds'] = ''  # TODO
+        estado['last_deaths'] = ''  # TODO
+        estado['total_death'] = int(row[4])
+        estado['death_rate'] = float(row[6])
+        estados.append(estado)
+
+    return estados
+
+
+def getStatusGeralEstadosIndexadoPorNome():
+    dados = getStatusGeralBrasilDB()
+
+    # estados = []
+    estados = {}
+    for row in dados:
+        vars = {}
+        vars['uf'] = row[1]
+        vars['date'] = row[0].strftime("%d/%m/%Y")
+        vars['population'] = row[5]
+        vars['total_confirmeds'] = int(row[3])
+        vars['last_confirmeds'] = ''  # TODO
+        vars['last_deaths'] = ''  # TODO
+        vars['total_death'] = int(row[4])
+        vars['death_rate'] = float(row[6])
+        estados[row[2]] = vars
+
+    return estados
+
+
+def getStatusGeralConfirmadosBrasilGeoChart():
+    dados = getStatusGeralBrasilDB()
+
+    chart = {}
+    chart['column1'] = 'Country'
+    chart['column2'] = 'Casos confirmados'
+    chart['header1'] = 'Brazil'
+    chart['header2'] = 0
+
+    estados = []
+    for row in dados:
+        value = {}
+        value['name'] = str(row[2])
+        value['total_confirmeds'] = int(row[3])
+        estados.append(value)
+    chart['estados'] = estados
+    return chart
+
+
 if __name__ == "__main__":
-    print(getGraficoStatusCidade("sao pedro de alcantara", "sc"))
+    # print(getGraficoStatusCidade("sao pedro de alcantara", "sc"))
+    # print(getStatusGeralBrasil())
+    # a = {'estados': getStatusGeralBrasil()}
+    print(getStatusGeralEstadosIndexadoPorNome())

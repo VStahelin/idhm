@@ -1,7 +1,8 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS, cross_origin
 
-from idhm_api.controllers.apiCidadeController import getUltimoStatusCidade, getGraficoStatusCidade
+from idhm_api.controllers.apiCidadeController import getUltimoStatusCidade, getGraficoStatusCidade, \
+    getStatusGeralEstados, getStatusGeralConfirmadosBrasilGeoChart, getStatusGeralEstadosIndexadoPorNome
 
 app = Flask(__name__, template_folder='../WEB-INF/templates')
 cors = CORS(app)
@@ -34,6 +35,7 @@ def aa(uf, cidade):
     except:
         return 'bad request', 400
 
+
 # http://127.0.0.1:5000/cidades/historico/sc/florianopolis
 @app.route('/cidades/historico/<string:uf>/<string:cidade>', methods=['GET'])
 @cross_origin()
@@ -45,6 +47,27 @@ def historico(uf, cidade):
         return json, 200
     except:
         return 'bad request', 400
+
+
+# http://127.0.0.1:5000/Brasil/QuadroGeral/IndexadoPorEstado
+@app.route('/Brasil/QuadroGeral/IndexadoPorEstado', methods=['GET'])
+@cross_origin()
+def quadroGeral():
+    try:
+        return getStatusGeralEstadosIndexadoPorNome(), 200
+    except:
+        return 'bad request', 400
+
+
+# http://127.0.0.1:5000/Brasil/QuadroGeral/GeoChart/Confirmados
+@app.route('/Brasil/QuadroGeral/GeoChart/Confirmados', methods=['GET'])
+@cross_origin()
+def quadroGeralGeoChartConfirmados():
+    try:
+        return getStatusGeralConfirmadosBrasilGeoChart(), 200
+    except:
+        return 'bad request', 400
+
 
 
 def up_api():
