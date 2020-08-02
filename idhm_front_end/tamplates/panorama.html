@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>
+        Single status city
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+          name='viewport'/>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet"/>
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../assets/demo/demo.css" rel="stylesheet"/>
+</head>
+<!--   Core JS Files   -->
+<script src="../assets/js/core/jquery.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="../assets/js/map/loader.js"></script>
+<script type="text/javascript" src="../assets/js/map/jsapi.js"></script>
+<!--<script type="text/javascript" src="../assets/js/map/jquery-3.3.1.min.js"></script> -->
+<!-- Script utilizado no tamplate do mapa-->
+<!--  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>-->
+
+<!-- Chart JS -->
+<script src="../assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="../assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
+<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+<script src="../assets/demo/demo.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
+</html>
+<body class="">
+<div class="wrapper ">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <div class="logo">
+            <a class="simple-text logo-mini">
+                <div class="logo-image-small">
+                    <img src="../assets/img/coroninha.png"/>
+                </div>
+            </a>
+            <a href="https://conteudo.imguol.com.br/c/noticias/a2/2020/03/18/18mar2020---o-presidente-jair-bolsonaro-ao-lado-de-varios-ministros-durante-coletiva-de-imprensa-para-falar-sobre-medidas-do-governo-pra-contar-a-epidemia-de-coronavirus-no-palacio-do-planalto-ao-1584568575929_v2_900x506.jpg"
+               class="simple-text logo-normal">
+                Lil'Gripe
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li class="active">
+                    <a href="#">
+                        <i class="nc-icon nc-map-big"></i>
+                        <p>Panorama</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="estado.html">
+                        <i class="nc-icon nc-zoom-split"></i>
+                        <p>Estado</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent ">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <a id="texto_titulo" class="navbar-brand" href="javascript:;">Panorama geral - BRASIL </a>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <div align="center">
+                            <input type="text" name="search" id="search" placeholder="Cidade"
+                                   class="form-control mr-sm-2"/>
+                        </div>
+                        <ul class="list-group" id="result"></ul>
+                        <br/>
+                    </div>
+                </form>
+                </ul>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="regions_div" style="width: 900px; height: 500px;"></div>
+                </div>
+                <div class="col-md-6 feature">
+                    <h4><b style="background-color:#ff5d5d;color:#ffffff;font-size:1.5em">Detalhamento</b></h4><br>
+                    <h4>Descricao de <span id="estado"></span>:</h4>
+                    <div id="dadosLojas" style="overflow-y: scroll; height:200px;">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var casos = [];
+    var ordemEstados = {};
+    var statusEstados;
+    window.onload = function () {
+        updateCasos();
+        updateCasosEstados();
+        initChart();
+        console.log(ordemEstados)
+    }
+
+    function initChart() {
+
+        google.charts.load('current', {'packages': ['geochart']});
+        google.charts.setOnLoadCallback(drawRegionsMap);
+
+        dicEstados = ordemEstados;
+
+        var ultimoEstadoSelecionado = '';
+
+        function drawRegionsMap() {
+
+            var data = google.visualization.arrayToDataTable(casos);
+
+            var options = {
+                region: 'BR',
+                resolution: 'provinces',
+                datalessRegionColor: '#e5e5e5',
+                defaultColor: '#c3dcf1',
+                backgroundColor: '#f4f3ef',
+                enableRegionInteractivity: true,
+                markerOpacity: 1,
+                colorAxis: {colors: ['#ffffff', '#ff0000']}
+            };
+
+            var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+            function myClickHandler() {
+                var selection = chart.getSelection();
+                var message = '';
+                for (var i = 0; i < selection.length; i++) {
+                    var item = selection[i];
+                    if (item.row != null && item.column != null) {
+                        message += '{' + item.row + ',column:' + item.column + '}';
+                    } else if (item.row != null) {
+                        message += '' + item.row + '';
+                    } else if (item.column != null) {
+                        message += '{column:' + item.column + '}';
+                    }
+                }
+                if (message == '') {
+                    message = ultimoEstadoSelecionado;
+                } else {
+                    ultimoEstadoSelecionado = message;
+                }
+                document.getElementById("dadosLojas").innerHTML = '';
+
+                document.getElementById("estado").innerHTML = dicEstados[message];
+                console.log(statusEstados[ordemEstados[message]])
+                console.log(ordemEstados[message])
+
+                if (ordemEstados[message] != undefined) {
+                    document.getElementById("dadosLojas").innerHTML +=
+                        '<br>Ultima Atualizacao: <b>' + statusEstados[ordemEstados[message]].date + '</b>' +
+                        '<br>Total de confirmados: <b>' + statusEstados[ordemEstados[message]].total_confirmeds + '</b>' +
+                        '<br>Confirmados nas ultimas 24h: <b>' + statusEstados[ordemEstados[message]].last_confirmeds + '</b>' +
+                        '<br>Total de mortos: <b>' + statusEstados[ordemEstados[message]].total_death + '</b>' +
+                        '<br>Mortos nas ultimas 24h: <b>' + statusEstados[ordemEstados[message]].last_deaths + '</b>' +
+                        '<br>Mortos por infectados: <b>' + statusEstados[ordemEstados[message]].death_rate + '</b>'
+                }
+
+            }
+
+            google.visualization.events.addListener(chart, 'select', myClickHandler);
+
+            chart.draw(data, options);
+
+        }
+    }
+
+    function updateCasosEstados() {
+        var URL = encodeURI("http://127.0.0.1:5000/Brasil/QuadroGeral/IndexadoPorEstado");
+        statusEstados = JSON.parse(callApi(URL))
+    }
+
+    function updateCasos() {
+        var URL = encodeURI("http://127.0.0.1:5000/Brasil/QuadroGeral/GeoChart/Confirmados");
+        var json = JSON.parse(callApi(URL))
+        casos.push([json.column1, json.column2])
+        casos.push([json.header1, json.header2])
+
+        var values = json.estados;
+        for (let i = 0; i < values.length; i++) {
+            casos.push([values[i].name, values[i].total_confirmeds])
+            Object.assign(ordemEstados, {[i + 1]: values[i].name})
+        }
+    }
+
+    function callApi(url) {
+        var request = new XMLHttpRequest();
+        request.open("GET", url, false);
+        request.send();
+        return request.responseText;
+    }
+</script>
